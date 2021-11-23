@@ -1,0 +1,244 @@
+<!DOCTYPE HTML>
+<html lang="en"> 
+<html>
+  <head>
+    <meta charset="utf-8"/>
+    <link href="//netdna.bootstrapcdn.com/twitter-bootstrap/2.3.2/css/bootstrap-combined.no-icons.min.css" rel="stylesheet">
+    <link href="fontawesome/css/all.css" rel="stylesheet">
+    <link rel="stylesheet" href="css/styles.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js" integrity="sha512-894YE6QWD5I59HgZOGReFYm4dnWc1Qt5NtvYSaNcOP+u1T9qYdvdihz0PPSiiqn/+/3e7Jo4EaG7TubfWGUrMQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="js/three.min.js"></script>
+    <script src="js/gio.min.js"></script>
+    <script src="js/scripts.js"></script>
+    
+  </head>
+  <body>
+    <div id="globalArea"></div>
+    <article class="screen">
+      <input type="checkbox" value="None" id="magicButton" name="check" />
+      <label class="main" for="magicButton"></label>
+    
+      <div class="coverImage"></div>
+      <div class="search"></div>
+      <div class="bodyPlayer"></div>
+    
+      <table class="list" id="listRadio">
+        <!--<tr class="radio">
+          <td class="nr"><h5>2<h5></td>
+          <td class="title"><h6 id="radioSelected">Toxic<h6></td>
+          <td class="length"><h5>3:22<h5></td>
+          <td><input type="checkbox" id="heart1" checked /><label class="zmr" for="heart1"></label></td>
+        </tr>-->        
+      </table>      
+      <div class="shadow"></div> 
+      <div class="bar"></div>  
+      <div class="info">
+        <h4 id="rName"></h4>
+        <h3 id="rCountry"></h3>
+      </div>
+      <audio preload="none" id="audio" controls>
+        <source id="radio_src" src="">
+      </audio>
+      <table class="player">
+        <td><input type="checkbox" id="backward" onclick="playNextOrPrevious(-1)"/><label class="backward" for="backward"></label></td>
+        <td><input type="checkbox" id="play" title="Play" onclick="togglePlayPause()"/><label class="play" for="play"></label></td>
+        <td><input type="checkbox" id="forward" onclick="playNextOrPrevious(1)"/><label class="forward" for="forward"></label></td>
+      </table>   
+      <table class="footer">
+        <td><input type="checkbox" id="love" checked /><label class="love" for="love"></label></td>
+        <td><input type="checkbox" id="shuffle"/><label class="shuffle" for="shuffle"></label></td>
+        <td><input type="checkbox" id="repeat" checked /><label class="repeat" for="repeat"></label></td>
+        <td><input type="checkbox" id="options"/><label class="options" for="options"></label></td>
+      </table>
+      <div class="current"><h2></h2></div>
+    </article>
+    
+    <script>
+      var data;
+      var radioList;
+      var radiosInCountry = [];
+      var currentCountry = "GABON";
+      
+      var container = document.getElementById( "globalArea" );
+      var controller = new GIO.Controller( container );
+      controller.setSurfaceColor( "#81F5FD" );
+      controller.setSelectedColor("#81F5FD");
+      controller.adjustOceanBrightness(0.8);
+      controller.setInitCountry("GA");
+      controller.showInOnly(true); 
+  
+      controller.setTransparentBackground( true ); 
+
+      // use the onCountryPicked() to set callback when clicked country changed
+      controller.onCountryPicked( callback );
+
+      // defined a callback function, as a demo, this function simply output selectedCountry, relatedCountries which are passed parameters into console
+      function callback ( selectedCountry, relatedCountries ) {
+        //console.log(selectedCountry.name);
+        //console.log(relatedCountries);
+        currentCountry = selectedCountry.name;
+        filtreRadio();
+        launchFirstRadio();
+      } 
+
+      // ask a file for the JSON data, using AJAX to load the data
+      $.ajax( {
+        url: "https://api.npoint.io/96de5c94eecb666d6c6a",
+        type: "GET",
+        contentType: "application/json; charset=utf-8",
+        async: true,
+        dataType: "json",
+        success: function ( inputData ) {
+          controller.addData( inputData );
+          controller.init();
+        }
+
+      } );
+      
+      // ask a file for the JSON data, using AJAX to load the data from Radio database
+      $.ajax( {
+        url: "https://api.npoint.io/804422dccce05b601f43",
+        type: "GET",
+        contentType: "application/json; charset=utf-8",
+        async: true,
+        dataType: "json",
+        success: function ( data ) {
+          radioList = data;
+          filtreRadio();
+          launchFirstRadio();
+        }
+
+      } );
+
+      function filtreRadio(){
+        k = 0;
+        radiosInCountry = [];
+        for(var i =0;i < radioList.length;i++)
+          {
+            var radio = radioList[i];
+            pays = radio.contry.split(" ");
+            if(pays[0].toUpperCase() === currentCountry.toUpperCase()){
+              radiosInCountry[k] = radio;
+              k++;
+            }
+            //Specific to United States
+            if(currentCountry.toUpperCase() === "UNITED STATES"){
+              if(radio.contry.toUpperCase() === currentCountry.toUpperCase()){
+                radiosInCountry[k] = radio;
+                k++;
+              }
+            }
+          }
+        loadRadios();
+      }
+
+      function loadRadios(){
+        $("#listRadio").empty();
+        for(var i=0;i < radiosInCountry.length;i++)
+          {
+            var radio = radiosInCountry[i];
+            $( ".list" ).append( "<tr class='radio'><td class='nr'><h5>"+radio.num+"<h5></td><td class='title'><h6>"+radio.name+"<h6></td><td class='length'><h5>"+radio.frequence+"<h5></td><td><input type='checkbox' id='heart'/><label class='zmr' for='heart'></label></td></tr>" 
+            );
+          }
+      }
+    </script>
+
+    <script>
+      var isPlaying = false;
+      var audio = document.getElementById('audio');
+      var playpause = document.getElementById("play");
+      var idOfCurrentRadio = -1;
+
+      function togglePlayPause() {
+        
+        if (audio.paused || audio.ended) {
+            playpause.title = "Pause";
+            audio.play();
+            isPlaying = true;
+        } else {
+            playpause.title = "Play";
+            audio.pause();
+            isPlaying = false;
+        }
+      }
+
+      $(document).on("click",".radio", function () {
+        var numRadio = parseInt($(this).children().eq(0).text());
+        for(var i =0;i < radiosInCountry.length;i++)
+          {
+            var radio = radiosInCountry[i];
+            if(numRadio===radio.num){
+              $("#rName").text(radio.name);
+              $(".current").children().eq(0).text(radio.name);
+              $("#rCountry").text(radio.contry);
+              updateCoverImage(radio.imgPreview);
+              $('h6#radioSelected').removeAttr('id');
+              $(this).children().eq(1).children().eq(0).attr('id', 'radioSelected');
+              changeRadio(radio.url,i);
+              break;
+            }
+          }
+      });
+
+      function changeRadio(sourceUrl,indiceTab) {
+        var audio = $("#audio");      
+        $("#radio_src").attr("src", sourceUrl);
+        audio[0].pause();
+        audio[0].load();
+        audio[0].oncanplaythrough = audio[0].play();
+        var playpause = document.getElementById("play");
+        playpause.title = "Pause";
+        playpause.checked = true;
+        isPlaying = true;
+        idOfCurrentRadio = indiceTab;
+      }
+
+      function launchFirstRadio(){
+        if(radiosInCountry.length!== 0){
+          var radio = radiosInCountry[0];
+          $("#rName").text(radio.name);
+          $(".current").children().eq(0).text(radio.name);
+          $("#rCountry").text(radio.contry);
+          updateCoverImage(radio.imgPreview);
+          $("#listRadio").children().eq(0).children().eq(1).children().eq(0).attr('id', 'radioSelected');
+          changeRadio(radio.url,0);
+        }
+      }
+
+      function updateCoverImage(url){
+        $('.coverImage').css({
+          'background': 'url(' + url + ') no-repeat', 
+          'background-size': 'cover', 
+          'width': '366px',
+          'height': '366px',
+          'padding': '0',
+          'margin': '0',
+          'position': 'absolute',
+          'top': '0',
+          'left': '0',
+          'transform-origin': '37px 80px',
+          'transition': 'all 0.3s ease-in'});
+      }
+
+      function playNextOrPrevious(sensLecture){
+        if(radiosInCountry.length > 1 && idOfCurrentRadio > -1){
+          let id = idOfCurrentRadio+1;
+          if(sensLecture === -1) id = idOfCurrentRadio-1;
+          if(id === radiosInCountry.length) id = 0; //Si la radio courante est la dernière on retourne à la 1ère
+          if(id < 0) id = radiosInCountry.length-1; //Si la radio courante est la 1ère on passe à la dernière
+          let radio = radiosInCountry[id];
+          $("#rName").text(radio.name);
+          $(".current").children().eq(0).text(radio.name);
+          $("#rCountry").text(radio.contry);
+          updateCoverImage(radio.imgPreview);
+          $('h6#radioSelected').removeAttr('id');
+          $("#listRadio").children().eq(id).children().eq(1).children().eq(0).attr('id', 'radioSelected');
+          changeRadio(radio.url,id);
+        }
+      }
+
+
+    </script>
+  </body>
+  
+</html>
