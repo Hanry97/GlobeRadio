@@ -760,6 +760,18 @@ audio {
   }
  }
 
+ @media only screen 
+  and (min-device-width: 375px) 
+  and (max-device-width: 812px) 
+  and (-webkit-min-device-pixel-ratio: 3) { 
+    .screen {
+      display: none;
+    }
+    .player-container {
+      display: flex;
+    }
+}
+
  /* Small devices (portrait tablets and large phones, 600px and up) */
  @media all and (min-width: 600px) {
   .screen {
