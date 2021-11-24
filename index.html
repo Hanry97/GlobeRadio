@@ -53,21 +53,6 @@
       </table>
       <div class="current"><h2></h2></div>
     </article>
-    
-    <div class="player-container">
-      <div class="box">
-        <div>   
-          <div class="next-prev">
-            <i class="fas fa-fast-backward fa-4x" title="Previous Track" id="prev-track" onclick="playNextOrPrevious(-1)"></i>
-            <div class="play-pause">
-              <i class="far fa-play-circle fa-4x" id="play-mini" onclick="togglePlayPause()"></i>
-              <i class="far fa-stop-circle fa-4x" id="stop" onclick="togglePlayPause()"></i>
-            </div>
-            <i class="fas fa-fast-forward fa-4x" title="Next Track" id="next-track" onclick="playNextOrPrevious(1)"></i>
-          </div>
-        </div>
-      </div>
-    </div>
 
     <script>
       var data;
@@ -165,23 +150,14 @@
       var playpause = document.getElementById("play");
       var idOfCurrentRadio = -1;
 
-      let play = document.getElementById("play-mini");
-      let next = document.getElementById("next-track");
-      let prev = document.getElementById("prev-track");
-      let stopr = document.getElementById("stop");
-
       function togglePlayPause() {
         
         if (audio.paused || audio.ended) {
             playpause.title = "Pause";
-            play.style.display = "none";
-            stopr.style.display = "block";
             audio.play();
             isPlaying = true;
         } else {
             playpause.title = "Play";
-            play.style.display = "block";
-            stopr.style.display = "none";
             audio.pause();
             isPlaying = false;
         }
@@ -226,8 +202,6 @@
           $("#rCountry").text(radio.contry);
           updateCoverImage(radio.imgPreview);
           $("#listRadio").children().eq(0).children().eq(1).children().eq(0).attr('id', 'radioSelected');
-          play.style.display = "none";
-          stopr.style.display = "block";
           changeRadio(radio.url,0);
         }
       }
