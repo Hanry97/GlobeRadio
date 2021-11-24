@@ -13,6 +13,8 @@ body {
     background-image: url("../img/background.jpg");
     background-repeat: no-repeat;
     background-size: 100% 100%;
+    overflow-y: hidden; /* Hide vertical scrollbar */
+    overflow-x: hidden; /* Hide horizontal scrollbar */
 }
 
 
@@ -669,4 +671,94 @@ audio {
 
 #radioSelected{
   color: #ff564c;
+}
+
+/*********** Mini MP3 - Player ********************/
+.player-container {
+  display: flex;
+  flex-direction: column;
+  position: absolute;
+  height: 100%;
+  margin: auto;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  overflow: hidden;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  box-shadow: 0px 0px 20px #8d97ba;
+}
+
+.box {
+  position: absolute;
+  width: 300px;
+  background: #111;
+  z-index: 4;
+  border-radius: 10px;
+  bottom: 15px;
+}
+
+.play-pause {
+  grid-area: one;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 15px;
+}
+#stop {
+  filter: invert(1);
+  cursor: pointer;
+  margin-top: 15px;
+  display: none;
+}
+
+#play-mini,
+#prev-track,
+#next-track
+ {
+  filter: invert(1);
+  cursor: pointer;
+  margin-top: 15px;
+}
+
+.track-info {
+  padding: 30px 25px 5px;
+  text-align: center;
+  height: 70px;
+}
+
+#track-artist {
+  color: #948ca5;
+  font-family: "Lato", sans-serif;
+  font-weight: bold;
+  font-size: 1.25rem;
+}
+
+#track-title {
+  color: white;
+  font-family: "Lato", sans-serif;
+  font-size: 1rem;
+}
+
+.next-prev {
+  grid-area: three;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  width: 85%;
+  margin: 0 auto;
+}
+
+
+@media all and (min-width: 768px) {
+  .player-container {
+      display: none;
+  }
+}
+
+@media all and (max-width: 768px) {
+  .screen {
+      display: none;
+  }
 }
