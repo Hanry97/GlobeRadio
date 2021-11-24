@@ -750,15 +750,48 @@ audio {
   margin: 0 auto;
 }
 
-
-@media all and (min-width: 768px) {
-  .player-container {
-      display: none;
-  }
-}
-
-@media all and (max-width: 768px) {
+ /* Extra small devices (phones, 600px and down) */
+ @media only screen and (max-width: 600px) {
   .screen {
-      display: none;
+    display: none;
   }
+  .player-container {
+    display: flex;
+  }
+ }
+
+ /* Small devices (portrait tablets and large phones, 600px and up) */
+ @media only screen and (min-width: 600px) {
+  .screen {
+    display: none;
+  }
+  .player-container {
+    display: flex;
+  }
+ }
+ 
+ /* Medium devices (landscape tablets, 768px and up) */
+ @media only screen and (min-width: 768px) {
+  .screen {
+    display: block;
+  }
+  .player-container {
+    display: none;
+  }
+ }
+ 
+ /* Large devices (laptops/desktops, 992px and up) */
+ @media only screen and (min-width: 992px) {.screen {
+  display: block;
 }
+.player-container {
+  display: none;
+}}
+ 
+ /* Extra large devices (large laptops and desktops, 1200px and up) */
+ @media only screen and (min-width: 1200px) {.screen {
+  display: block;
+}
+.player-container {
+  display: none;
+}} 
