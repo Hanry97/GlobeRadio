@@ -750,28 +750,6 @@ audio {
   margin: 0 auto;
 }
 
- /* Extra small devices (phones, 600px and down) */
- @media all and (max-width: 600px) {
-  .screen {
-    display: none;
-  }
-  .player-container {
-    display: flex;
-  }
- }
-
- @media only screen 
-    and (device-width: 414px) 
-    and (device-height: 896px) 
-    and (-webkit-device-pixel-ratio: 2) { 
-    .screen {
-      display: none;
-    }
-    .player-container {
-      display: flex;
-    }
-}
-
  /* Small devices (portrait tablets and large phones, 600px and up) */
  @media only screen 
     and (device-width: 414px) 
