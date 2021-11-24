@@ -773,7 +773,10 @@ audio {
 }
 
  /* Small devices (portrait tablets and large phones, 600px and up) */
- @media all and (min-width: 600px) {
+ @media only screen 
+    and (device-width: 414px) 
+    and (device-height: 896px) 
+    and (-webkit-device-pixel-ratio: 3) {
   .screen {
     display: none;
   }
@@ -782,28 +785,3 @@ audio {
   }
  }
  
- /* Medium devices (landscape tablets, 768px and up) */
- @media all and (min-width: 768px) {
-  .screen {
-    display: block;
-  }
-  .player-container {
-    display: none;
-  }
- }
- 
- /* Large devices (laptops/desktops, 992px and up) */
- @media only screen and (min-width: 992px) {.screen {
-  display: block;
-}
-.player-container {
-  display: none;
-}}
- 
- /* Extra large devices (large laptops and desktops, 1200px and up) */
- @media only screen and (min-width: 1200px) {.screen {
-  display: block;
-}
-.player-container {
-  display: none;
-}} 
