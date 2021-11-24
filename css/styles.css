@@ -692,7 +692,7 @@ audio {
 
 .box {
   position: absolute;
-  width: 300px;
+  width: 200px;
   background: #111;
   z-index: 4;
   border-radius: 10px;
