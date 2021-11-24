@@ -751,7 +751,7 @@ audio {
 }
 
  /* Extra small devices (phones, 600px and down) */
- @media only screen and (max-width: 600px) {
+ @media all and (max-width: 600px) {
   .screen {
     display: none;
   }
@@ -761,7 +761,7 @@ audio {
  }
 
  /* Small devices (portrait tablets and large phones, 600px and up) */
- @media only screen and (min-width: 600px) {
+ @media all and (min-width: 600px) {
   .screen {
     display: none;
   }
@@ -771,7 +771,7 @@ audio {
  }
  
  /* Medium devices (landscape tablets, 768px and up) */
- @media only screen and (min-width: 768px) {
+ @media all and (min-width: 768px) {
   .screen {
     display: block;
   }
